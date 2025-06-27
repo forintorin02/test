@@ -39,7 +39,6 @@ const TABS = [
 function App() {
   const [activeTab, setActiveTab] = useState('about');
   const [currentBlog, setCurrentBlog] = useState<string | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleHashChange = useMemo(() => () => {
     const hash = window.location.hash;
@@ -62,14 +61,7 @@ function App() {
   useEffect(() => {
     window.addEventListener('hashchange', handleHashChange);
     handleHashChange();
-    
-    // Trigger loading animation
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-      clearTimeout(timer);
-    };
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, [handleHashChange]);
 
   const handleCaseStudyClick = (caseStudyTitle: string) => {
@@ -100,36 +92,32 @@ function App() {
   };
 
   if (currentBlog) {
-    return (
-      <div className="page-transition">
-        {renderTabContent()}
-      </div>
-    );
+    return renderTabContent();
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white gradient-animate">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
       <div className="container mx-auto px-4 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
           {/* Hero Section */}
-          <div className={`flex flex-col lg:flex-row items-center gap-6 mb-8 ${isLoaded ? 'animate-fade-in-up' : 'opacity-0'}`}>
-            <div className="relative flex-shrink-0 animate-float">
-              <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-400 to-orange-500 p-0.5 hover-lift will-change-transform">
+          <div className="flex flex-col lg:flex-row items-center gap-6 mb-8">
+            <div className="relative flex-shrink-0">
+              <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-yellow-400 to-orange-500 p-0.5">
                 <img 
                   src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400" 
                   alt="Istiak Ahmed"
-                  className="w-full h-full object-cover rounded-2xl transition-transform duration-700 hover:scale-110"
+                  className="w-full h-full object-cover rounded-2xl"
                   loading="eager"
                 />
               </div>
-              <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-black px-3 py-1 rounded-full font-bold text-sm shadow-lg animate-pulse-glow">
+              <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-black px-3 py-1 rounded-full font-bold text-sm shadow-lg">
                 Available
               </div>
             </div>
 
-            <div className={`flex-1 text-center lg:text-left ${isLoaded ? 'animate-fade-in-right animate-delay-200' : 'opacity-0'}`}>
+            <div className="flex-1 text-center lg:text-left">
               <div className="mb-3">
-                <span className="inline-block bg-yellow-400/10 text-yellow-400 px-3 py-1.5 rounded-full text-sm font-medium hover:bg-yellow-400/20 transition-all duration-300 hover:scale-105 will-change-transform">
+                <span className="inline-block bg-yellow-400/10 text-yellow-400 px-3 py-1.5 rounded-full text-sm font-medium">
                   Digital Marketing Expert
                 </span>
               </div>
@@ -150,11 +138,11 @@ function App() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`group inline-flex items-center justify-center gap-2 bg-gradient-to-r ${link.gradient} px-4 py-3 rounded-lg transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 shadow-lg text-sm font-medium hover:shadow-2xl will-change-transform focus-ring`}
+                    className={`group inline-flex items-center justify-center gap-2 bg-gradient-to-r ${link.gradient} px-4 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg text-sm font-medium`}
                   >
                     {link.icon}
                     <span>{link.label}</span>
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </a>
                 ))}
               </div>
@@ -162,15 +150,11 @@ function App() {
           </div>
 
           {/* Stats Section */}
-          <div className={`grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 ${isLoaded ? 'animate-fade-in-up animate-delay-300' : 'opacity-0'}`}>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             {STATS.map((stat, index) => (
-              <div 
-                key={index} 
-                className={`bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-500 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl will-change-transform animate-scale-in`}
-                style={{ animationDelay: `${0.4 + index * 0.1}s` }}
-              >
+              <div key={index} className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700/50">
                 <div className="flex items-center gap-3 mb-2">
-                  <stat.icon className={`w-5 h-5 ${stat.color} transition-transform duration-300 hover:scale-110`} />
+                  <stat.icon className={`w-5 h-5 ${stat.color}`} />
                   <span className="text-xl font-bold">{stat.value}</span>
                 </div>
                 <p className="text-gray-400 text-sm">{stat.label}</p>
@@ -180,17 +164,17 @@ function App() {
         </div>
 
         {/* Navigation */}
-        <div className={`flex justify-center mb-6 px-4 ${isLoaded ? 'animate-slide-in-top animate-delay-500' : 'opacity-0'}`}>
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-1 border border-gray-700/50 w-full max-w-md hover:border-gray-600/50 transition-all duration-300">
+        <div className="flex justify-center mb-6 px-4">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-1 border border-gray-700/50 w-full max-w-md">
             <div className="flex gap-1">
               {TABS.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => handleTabChange(tab.id)}
-                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-500 transform will-change-transform focus-ring ${
+                  className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
                     activeTab === tab.id
-                      ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg scale-105'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50 hover:scale-105'
+                      ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
                   }`}
                 >
                   {tab.label}
@@ -202,7 +186,7 @@ function App() {
 
         {/* Tab Content */}
         <div className="max-w-4xl mx-auto">
-          <div className={`text-center mb-6 ${isLoaded ? 'animate-fade-in-up animate-delay-600' : 'opacity-0'}`}>
+          <div className="text-center mb-6">
             <div className="inline-block relative">
               <h2 className="text-2xl sm:text-3xl font-bold mb-2 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent capitalize">
                 {activeTab === 'client-work' ? 'Client Work' : activeTab}
@@ -211,9 +195,7 @@ function App() {
             </div>
           </div>
           
-          <div className={`page-transition ${isLoaded ? 'animate-fade-in-up animate-delay-700' : 'opacity-0'}`}>
-            {renderTabContent()}
-          </div>
+          {renderTabContent()}
         </div>
       </div>
     </div>

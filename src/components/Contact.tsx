@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MessageCircle, Mail, Phone, Clock, CheckCircle, MapPin, Send, User, MessageSquare, DollarSign, Calendar, Loader2 } from 'lucide-react';
 
 const CONTACT_METHODS = [
@@ -60,12 +60,6 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -119,9 +113,9 @@ export default function Contact() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className={`text-center space-y-4 ${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`}>
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-400/30 rounded-full px-4 py-2 hover:scale-105 transition-all duration-300 will-change-transform">
-          <MessageCircle className="w-4 h-4 text-yellow-400 animate-pulse" />
+      <div className="text-center space-y-4">
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-400/30 rounded-full px-4 py-2">
+          <MessageCircle className="w-4 h-4 text-yellow-400" />
           <span className="text-yellow-400 font-medium text-sm">Let's Connect</span>
         </div>
         <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
@@ -134,17 +128,17 @@ export default function Contact() {
       </div>
 
       {/* Contact Methods */}
-      <div className={`grid md:grid-cols-2 gap-6 ${isVisible ? 'animate-fade-in-up animate-delay-200' : 'opacity-0'}`}>
+      <div className="grid md:grid-cols-2 gap-6">
         {CONTACT_METHODS.map((method, index) => (
-          <div key={index} className="group relative will-change-transform">
-            <div className={`absolute inset-0 bg-gradient-to-r ${method.hoverGradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700`}></div>
-            <div className={`relative bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 group-hover:${method.borderColor} transition-all duration-700 hover:scale-105 hover:-translate-y-2 hover:shadow-2xl`}>
+          <div key={index} className="group relative">
+            <div className={`absolute inset-0 bg-gradient-to-r ${method.hoverGradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+            <div className={`relative bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 group-hover:${method.borderColor} transition-all duration-500`}>
               <div className="flex items-center gap-3 mb-4">
-                <div className={`w-12 h-12 bg-gradient-to-br ${method.gradient} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500 will-change-transform`}>
+                <div className={`w-12 h-12 bg-gradient-to-br ${method.gradient} rounded-xl flex items-center justify-center`}>
                   <method.icon className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white text-base group-hover:text-yellow-400 transition-colors duration-300">{method.title}</h4>
+                  <h4 className="font-bold text-white text-base">{method.title}</h4>
                   <p className="text-gray-400 text-sm">{method.subtitle}</p>
                 </div>
               </div>
@@ -159,7 +153,7 @@ export default function Contact() {
       </div>
 
       {/* Availability */}
-      <div className={`bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-xl will-change-transform ${isVisible ? 'animate-fade-in-up animate-delay-300' : 'opacity-0'}`}>
+      <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50">
         <div className="text-center mb-6">
           <h4 className="text-lg font-bold text-white mb-2">Response Time & Availability</h4>
           <p className="text-gray-400 text-sm">Here's what you can expect when you reach out</p>
@@ -167,12 +161,8 @@ export default function Contact() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {AVAILABILITY_INFO.map((info, index) => (
-            <div 
-              key={index} 
-              className={`text-center hover:scale-105 transition-transform duration-300 will-change-transform animate-scale-in`}
-              style={{ animationDelay: `${0.4 + index * 0.1}s` }}
-            >
-              <div className={`w-12 h-12 bg-gradient-to-br ${info.gradient} rounded-xl flex items-center justify-center mx-auto mb-3 hover:scale-110 transition-transform duration-300 will-change-transform`}>
+            <div key={index} className="text-center">
+              <div className={`w-12 h-12 bg-gradient-to-br ${info.gradient} rounded-xl flex items-center justify-center mx-auto mb-3`}>
                 <info.icon className="w-6 h-6 text-white" />
               </div>
               <h5 className="font-semibold text-white text-sm mb-1">{info.title}</h5>
@@ -183,10 +173,10 @@ export default function Contact() {
       </div>
 
       {/* Contact Form */}
-      <div className={`group relative will-change-transform ${isVisible ? 'animate-fade-in-up animate-delay-400' : 'opacity-0'}`}>
-        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+      <div className="group relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
-        <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-yellow-400/30 group-hover:border-yellow-400/50 transition-all duration-700 shadow-2xl hover:scale-[1.01] hover:-translate-y-1">
+        <div className="relative bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-sm rounded-2xl p-6 border border-yellow-400/30 group-hover:border-yellow-400/50 transition-all duration-500 shadow-2xl">
           <div className="text-center mb-6">
             <h4 className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent mb-2">Send Me a Message</h4>
             <p className="text-gray-300 text-sm">Fill out the form below and I'll get back to you within 24 hours</p>
@@ -207,7 +197,7 @@ export default function Contact() {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 text-sm backdrop-blur-sm hover:scale-[1.02] will-change-transform"
+                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 text-sm backdrop-blur-sm"
                   placeholder="Your full name"
                 />
               </div>
@@ -223,7 +213,7 @@ export default function Contact() {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 text-sm backdrop-blur-sm hover:scale-[1.02] will-change-transform"
+                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 text-sm backdrop-blur-sm"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -242,7 +232,7 @@ export default function Contact() {
                 onChange={handleInputChange}
                 required
                 rows={3}
-                className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 resize-none text-sm backdrop-blur-sm hover:scale-[1.01] will-change-transform"
+                className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 resize-none text-sm backdrop-blur-sm"
                 placeholder="Describe your current marketing challenges..."
               />
             </div>
@@ -260,7 +250,7 @@ export default function Contact() {
                 onChange={handleInputChange}
                 required
                 rows={3}
-                className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 resize-none text-sm backdrop-blur-sm hover:scale-[1.01] will-change-transform"
+                className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 resize-none text-sm backdrop-blur-sm"
                 placeholder="What specific results are you looking to achieve?"
               />
             </div>
@@ -277,7 +267,7 @@ export default function Contact() {
                   name="budget"
                   value={formData.budget}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 text-sm backdrop-blur-sm hover:scale-[1.02] will-change-transform"
+                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 text-sm backdrop-blur-sm"
                 >
                   <option value="">Select budget range</option>
                   {BUDGET_OPTIONS.map((option) => (
@@ -295,7 +285,7 @@ export default function Contact() {
                   name="timeline"
                   value={formData.timeline}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 text-sm backdrop-blur-sm hover:scale-[1.02] will-change-transform"
+                  className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 text-sm backdrop-blur-sm"
                 >
                   <option value="">Select timeline</option>
                   {TIMELINE_OPTIONS.map((option) => (
@@ -317,7 +307,7 @@ export default function Contact() {
                 value={formData.message}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-500 resize-none text-sm backdrop-blur-sm hover:scale-[1.01] will-change-transform"
+                className="w-full px-4 py-3 bg-gray-900/60 border border-yellow-400/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400/60 focus:border-yellow-400/60 hover:border-yellow-400/50 transition-all duration-300 resize-none text-sm backdrop-blur-sm"
                 placeholder="Any additional details or questions..."
               />
             </div>
@@ -327,7 +317,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 disabled:from-gray-600 disabled:to-gray-700 px-8 py-4 rounded-lg font-semibold text-black transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-yellow-400/25 hover:shadow-2xl text-base will-change-transform focus-ring"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 disabled:from-gray-600 disabled:to-gray-700 px-8 py-4 rounded-lg font-semibold text-black transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-yellow-400/25 text-base"
               >
                 {isSubmitting ? (
                   <>
@@ -345,7 +335,7 @@ export default function Contact() {
 
             {/* Status Messages */}
             {submitStatus === 'success' && (
-              <div className="text-center p-4 bg-green-500/20 border border-green-500/30 rounded-lg backdrop-blur-sm animate-fade-in-up">
+              <div className="text-center p-4 bg-green-500/20 border border-green-500/30 rounded-lg backdrop-blur-sm">
                 <CheckCircle className="w-6 h-6 text-green-400 mx-auto mb-2" />
                 <p className="text-green-400 font-medium text-sm">Message sent successfully!</p>
                 <p className="text-gray-300 text-sm mt-1">I'll get back to you within 24 hours.</p>
@@ -353,7 +343,7 @@ export default function Contact() {
             )}
 
             {submitStatus === 'error' && (
-              <div className="text-center p-4 bg-red-500/20 border border-red-500/30 rounded-lg backdrop-blur-sm animate-fade-in-up">
+              <div className="text-center p-4 bg-red-500/20 border border-red-500/30 rounded-lg backdrop-blur-sm">
                 <p className="text-red-400 font-medium text-sm">Failed to send message</p>
                 <p className="text-gray-300 text-sm mt-1">Please try again or contact me directly via email.</p>
               </div>
@@ -363,9 +353,9 @@ export default function Contact() {
       </div>
 
       {/* CTA */}
-      <div className={`text-center ${isVisible ? 'animate-fade-in-up animate-delay-500' : 'opacity-0'}`}>
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400/10 to-orange-500/10 border border-yellow-400/20 rounded-full px-6 py-3 hover:scale-105 hover:bg-yellow-400/20 transition-all duration-500 will-change-transform">
-          <Send className="w-5 h-5 text-yellow-400 animate-pulse" />
+      <div className="text-center">
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400/10 to-orange-500/10 border border-yellow-400/20 rounded-full px-6 py-3">
+          <Send className="w-5 h-5 text-yellow-400" />
           <span className="text-white font-medium text-sm">Let's build something amazing together</span>
         </div>
       </div>
